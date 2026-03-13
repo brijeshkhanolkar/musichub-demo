@@ -41,8 +41,7 @@ export function StaggerContainer({ children, className = '' }: Props) {
   return (
     <motion.div
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-100px' }}
+      animate="visible"
       variants={{
         visible: { transition: { staggerChildren: 0.15 } },
         hidden: {},
