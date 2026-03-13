@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+enum RentalStatus {
+  PENDING
+  ACTIVE
+  RETURNED
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  phone     String?
+  address   String?
+  city      String?
+  zip       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bookings Booking[]
+  rentals  Rental[]
+}
+
+model Musician {
+  id          String   @id @default(cuid())
+  name        String
+  genre       String
+  instrument  String
+  bio         String
+  pricePerEvent Float
+  image       String
+  rating      Float    @default(4.5)
+  experience  Int      @default(5)
+  location    String
+  available   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  bookings Booking[]
+}
+
+model RentalItem {
+  id          String   @id @default(cuid())
+  name        String
+  category    String
+  description String
+  pricePerDay Float
+  image       String
+  brand       String
+  condition   String   @default("Excellent")
+  available   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  rentals Rental[]
+}
+
+model Booking {
+  id         String        @id @default(cuid())
+  userId     String
+  musicianId String
+  eventDate  DateTime
+  eventType  String
+  venue      String
+  status     BookingStatus @default(PENDING)
+  totalPrice Float
+  notes      String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  user     User     @relation(fields: [userId], references: [id])
+  musician Musician @relation(fields: [musicianId], references: [id])
+}
+
+model Rental {
+  id              String       @id @default(cuid())
+  userId          String
+  rentalItemId    String
+  startDate       DateTime
+  endDate         DateTime
+  days            Int
+  discount        Float        @default(0)
+  totalPrice      Float
+  status          RentalStatus @default(PENDING)
+  deliveryAddress String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  user       User       @relation(fields: [userId], references: [id])
+  rentalItem RentalItem @relation(fields: [rentalItemId], references: [id])
+}
