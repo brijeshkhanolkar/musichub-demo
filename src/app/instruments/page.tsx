@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import InstrumentCard from '@/components/InstrumentCard';
+import { SlideUp, StaggerContainer, StaggerItem } from '@/components/animations';
 
 interface Instrument {
   id: string;
@@ -42,14 +43,14 @@ function InstrumentsContent() {
     <div className="pt-24 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-12">
+        <SlideUp className="mb-12">
           <h1 className="text-4xl font-bold text-surface-900 dark:text-white">
             Rent Instruments
           </h1>
           <p className="text-surface-500 dark:text-surface-400 mt-3 text-lg">
             Premium instruments at affordable daily rates with multi-day discounts
           </p>
-        </div>
+        </SlideUp>
 
         {/* Filters */}
         <div className="flex flex-col lg:flex-row gap-6 mb-10">
@@ -84,11 +85,13 @@ function InstrumentsContent() {
 
         {/* Results */}
         {loading ? (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {[...Array(8)].map((_, i) => (
-              <div key={i} className="bg-surface-100 dark:bg-surface-800 rounded-2xl h-80 animate-pulse" />
+              <StaggerItem key={i}>
+                <div className="bg-surface-100 dark:bg-surface-800 rounded-2xl h-80 animate-pulse" />
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         ) : instruments.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-6xl mb-4">🎸</p>
@@ -96,11 +99,13 @@ function InstrumentsContent() {
             <p className="text-surface-500">Try adjusting your search or filters</p>
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {instruments.map(i => (
-              <InstrumentCard key={i.id} {...i} />
+              <StaggerItem key={i.id}>
+                <InstrumentCard {...i} />
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         )}
       </div>
     </div>

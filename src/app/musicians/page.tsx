@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import MusicianCard from '@/components/MusicianCard';
+import { SlideUp, StaggerContainer, StaggerItem } from '@/components/animations';
 
 interface Musician {
   id: string;
@@ -42,14 +43,14 @@ function MusiciansContent() {
   return (
     <div className="pt-24 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-12">
+        <SlideUp className="mb-12">
           <h1 className="text-4xl font-bold text-surface-900 dark:text-white">
             Hire Musicians
           </h1>
           <p className="text-surface-500 dark:text-surface-400 mt-3 text-lg">
             Find and book talented musicians for your next event
           </p>
-        </div>
+        </SlideUp>
 
         <div className="flex flex-col lg:flex-row gap-6 mb-10">
           <div className="relative flex-1 max-w-md">
@@ -83,11 +84,13 @@ function MusiciansContent() {
         </div>
 
         {loading ? (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {[...Array(8)].map((_, i) => (
-              <div key={i} className="bg-surface-100 dark:bg-surface-800 rounded-2xl h-96 animate-pulse" />
+              <StaggerItem key={i}>
+                <div className="bg-surface-100 dark:bg-surface-800 rounded-2xl h-96 animate-pulse" />
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         ) : musicians.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-6xl mb-4">🎵</p>
@@ -95,11 +98,13 @@ function MusiciansContent() {
             <p className="text-surface-500">Try adjusting your search or filters</p>
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {musicians.map(m => (
-              <MusicianCard key={m.id} {...m} />
+              <StaggerItem key={m.id}>
+                <MusicianCard {...m} />
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         )}
       </div>
     </div>
