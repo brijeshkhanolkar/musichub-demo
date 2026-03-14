@@ -8,14 +8,8 @@ if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
   console.warn('CRITICAL: DATABASE_URL is missing in production environment');
 }
 
-let dbUrl = process.env.DATABASE_URL;
-
-// On Vercel, Supabase port 6543 can have IPv6 connection pooler issues
-if (dbUrl && dbUrl.includes('.supabase.co')) {
-  dbUrl = dbUrl.replace(':6543', ':5432');
-  dbUrl = dbUrl.replace('?pgbouncer=true', '');
-  dbUrl = dbUrl.replace('&pgbouncer=true', '');
-}
+// HARDCODED FOR TESTING - forces the exact URL we know works locally
+let dbUrl = "postgresql://postgres:King007%40bpk123@db.shcodruuvnfykgayzkhj.supabase.co:6543/postgres?pgbouncer=true&connection_limit=1";
 
 export const prisma = globalForPrisma.prisma ?? new PrismaClient({
   datasources: {
